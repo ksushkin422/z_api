@@ -151,10 +151,14 @@ class _HomeState extends State<Home> {
                         builder: (BuildContext context) {
                           return CupertinoActionSheet(
                             actions: [
-
                               CupertinoActionSheetAction(
                                   onPressed: () {
-
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('Выполнено',)),
+                              CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    Navigator.pop(context);
                                   },
                                   child: Text('Изменить',)),
                               CupertinoActionSheetAction(
