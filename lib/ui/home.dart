@@ -159,7 +159,33 @@ class _HomeState extends State<Home> {
                                   child: Text('Изменить',)),
                               CupertinoActionSheetAction(
                                   onPressed: () {
+                                    Navigator.pop(context);
+                                    showCupertinoDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return CupertinoAlertDialog(
+                                            title: Text('Подтверждение'),
+                                            content: Text('Точно удалить карточку?'),
+                                            actions: <Widget>[
+                                              CupertinoDialogAction(
+                                                child: Text('Да'),
+                                                isDestructiveAction: false,
+                                                onPressed: () {
+                                                  bloc.deleteItem(item.id);
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
+                                              CupertinoDialogAction(
+                                                child: Text('Нет'),
+                                                isDestructiveAction: false,
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                              ),
 
+                                            ],
+                                          );
+                                        });
                                   },
                                   child: Text('Удалить',)),
 
