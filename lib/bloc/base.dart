@@ -13,11 +13,13 @@ class ItemBloc {
 
   deleteItem(int id) async {
     await itemData.apiDeleteItem(id);
+    getItems();
   }
 
-  // newItem(Item) async {
-  //   var response = await itemData
-  // }
+  newItem(Map req_json) async {
+    var response = await itemData.apiSetNewItem(req_json);
+    getItems();
+  }
 
   dispose() {
     _items.close();

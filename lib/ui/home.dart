@@ -9,6 +9,8 @@ import 'dart:developer' as developer;
 import 'package:my_game/domain/response.dart';
 import 'package:my_game/services/types_items.dart';
 
+import 'new_item_form.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -28,6 +30,17 @@ class _HomeState extends State<Home> {
     developer.log('${bloc.getItems()}');
     return Scaffold(
       backgroundColor: const Color(0xEEFFFFFF),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueAccent,
+        onPressed: (){
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => AddItem(),
+              ));
+        },
+        child: Icon(Icons.library_add),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: _steramBuilder(),

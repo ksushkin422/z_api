@@ -1,6 +1,6 @@
-# my_game
+# flutter_bloc_crud
 
-A new Flutter project.
+A new Flutter project with DIO, bloc pattern.
 
 ## Getting Started
 

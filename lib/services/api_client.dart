@@ -56,11 +56,11 @@ class ApiClient {
     return await dio.delete(url);
   }
 
-  Future apiSetNewItem() async {
+  Future apiSetNewItem(Map req_json) async {
     final String url = '$basicUrl';
     Dio dio = getDio();
     try {
-
+      return await dio.post(url, data: req_json);
     }  on DioError catch (e) {
       if (e.response != null) {
         developer.log('Dio error!');
