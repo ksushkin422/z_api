@@ -19,6 +19,9 @@ class ItemBloc {
   newItem(Map req_json) async {
     var response = await itemData.apiSetNewItem(req_json);
     getItems();
+    if (response.statusCode==200){
+      return true;
+    }
   }
 
   dispose() {

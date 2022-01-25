@@ -60,6 +60,7 @@ class ApiClient {
     final String url = '$basicUrl';
     Dio dio = getDio();
     try {
+      developer.log('Я сюда зашел');
       return await dio.post(url, data: req_json);
     }  on DioError catch (e) {
       if (e.response != null) {

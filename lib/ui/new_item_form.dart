@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_game/bloc/base.dart';
 
 class AddItem extends StatefulWidget {
 
@@ -187,6 +188,40 @@ class _AddItemState extends State<AddItem> {
                       onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 10.0),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                              top: 20,
+                              bottom: 40,
+                            ),
+                            child: Container(
+                                height: Theme.of(context)
+                                    .textTheme
+                                    .headline2!
+                                    .fontSize,
+                                width: Theme.of(context)
+                                        .textTheme
+                                        .headline1!
+                                        .fontSize! *
+                                    2.5,
+                                child: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 10, right: 10, left: 10),
+                                    child: RaisedButton(
+                                      onPressed: () {
+                                        Map req_new_item = {
+                                          "title": title,
+                                          "text": text,
+                                          "kind": kind,
+                                          "completed": completed,
+                                          "dt": '$selectedDate'
+                                        };
+                                        bloc.newItem(req_new_item);
+                                        Navigator.pop(context);
+
+                                      },
+                                    )))))
                   ])
               )
           )
