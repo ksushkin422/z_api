@@ -1,17 +1,11 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as developer;
-
 import 'package:flutter/services.dart';
-
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_game/bloc/base.dart';
 
 class AddItem extends StatefulWidget {
-
-
   @override
   _AddItemState createState() => _AddItemState();
 }
@@ -22,6 +16,8 @@ class _AddItemState extends State<AddItem> {
     super.initState();
   }
 
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   DateTime dt = DateTime.now();
   DateTime selectedDate = DateTime.now();
   bool checkBoxValue = true;
@@ -29,7 +25,6 @@ class _AddItemState extends State<AddItem> {
   String text = '';
   int kind = 0;
   bool completed = false;
-
 
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -58,174 +53,226 @@ class _AddItemState extends State<AddItem> {
                 Theme.of(context).textTheme.headline6!.fontSize!.toDouble(),
           ),
           child: Form(
-              key: GlobalKey<FormState>(),
+              key: this._formKey,
               child: Material(
                   color: Color(0xFFFFFF),
-                  child: Column( children: [
-                  Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  child:
-                    TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) return 'Пожалуйста введите title';
+                  child: Column(children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
-                      autofocus: false,
-                      onChanged: (val) {
-                        title = val;
-                      },
-                      initialValue: title,
-                        decoration: InputDecoration(
-                          labelText: "title",
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF364480),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 2.0,
-                            ),
-                          ),
-                        )
-                    )
-                  ),
-              Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                  child:
-                    TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) return 'Пожалуйста введите text';
-                      },
-                      onChanged: (val) {
-                        text = val;
-                      },
-                      initialValue: text,
-                        decoration: InputDecoration(
-                          labelText: "text",
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF364480),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 2.0,
-                            ),
-                          ),
-                        )
-                    )
-              ),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                      child:
-                      TextFormField(
-                      validator: (value) {
-                        if (value!.isEmpty) return 'Пожалуйста введите kind';
-                      },
-                      onChanged: (val) {
-                        kind = int.parse(val);
-                      },
-                          textInputAction: TextInputAction.next,
-                          autofocus: false,
-                          style: TextStyle(color: Color(0xFF364480)),
-                      initialValue: (kind).toString(),
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
-                        decoration: InputDecoration(
-                            labelText: "kind",
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Color(0xFF364480),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            borderSide: BorderSide(
-                              color: Colors.grey,
-                              width: 2.0,
-                            ),
-                          ),
-                        )
-
-                    )),
+                      child: Icon(Icons.arrow_back),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(CircleBorder()),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                        // <-- Button color
+                        overlayColor:
+                            MaterialStateProperty.resolveWith<Color?>((states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.lightBlue; // <-- Splash color
+                        }),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Пожалуйста введите title';
+                            },
+                            autofocus: false,
+                            onChanged: (val) {
+                              title = val;
+                            },
+                            initialValue: title,
+                            decoration: InputDecoration(
+                              labelText: "title",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 2.0,
+                                ),
+                              ),
+                            ))),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Пожалуйста введите text';
+                            },
+                            onChanged: (val) {
+                              text = val;
+                            },
+                            initialValue: text,
+                            decoration: InputDecoration(
+                              labelText: "text",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 2.0,
+                                ),
+                              ),
+                            ))),
+                    Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                        child: TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty)
+                                return 'Пожалуйста введите kind';
+                            },
+                            onChanged: (val) {
+                              kind = int.parse(val);
+                            },
+                            textInputAction: TextInputAction.next,
+                            autofocus: false,
+                            style: TextStyle(color: Color(0xFF364480)),
+                            initialValue: (kind).toString(),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: InputDecoration(
+                              labelText: "kind",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Color(0xFF364480),
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 2.0,
+                                ),
+                              ),
+                            ))),
                     const SizedBox(height: 10.0),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         child: SwitchListTile(
-                          title: Text('completed', style: TextStyle(fontWeight: FontWeight.w300),),
+                          title: Text(
+                            'completed',
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
                           value: completed,
                           onChanged: (bool value) {
-                          setState(() {
-                            developer.log('${value}');
-                            completed = value;
-                            // trainingTest=value;
-                          });
-                        },
-                        )
-                    ),
-
-
+                            setState(() {
+                              developer.log('${value}');
+                              completed = value;
+                              // trainingTest=value;
+                            });
+                          },
+                        )),
                     ListTile(
                       subtitle: Text(
-                        '${DateFormat('dd-MM-yyyy – kk:mm').format(selectedDate)}',  style: TextStyle(fontWeight: FontWeight.w300),
+                        '${DateFormat('dd-MM-yyyy – kk:mm').format(selectedDate)}',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.w300),
                         // '${formatDate(DateFormat(r'''yyyy-MM-dd''').parse(item.dt), [d, ' ', MM, ' ', yyyy]).toLowerCase()}', textAlign: TextAlign.end, style: TextStyle( fontWeight: FontWeight.w300),
                       ),
                       title: Text(
                         'dt',
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 20.0),
                       ),
-                      leading: Icon(Icons.timer),
-
+                      leading: Icon(
+                        Icons.timer,
+                        color: Colors.lightBlue,
+                      ),
+                      trailing: Icon(
+                        Icons.timer,
+                        color: Colors.lightBlue,
+                      ),
                       onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 10.0),
-                    Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                            padding: EdgeInsets.only(
-                              top: 20,
-                              bottom: 40,
-                            ),
-                            child: Container(
-                                height: Theme.of(context)
-                                    .textTheme
-                                    .headline2!
-                                    .fontSize,
-                                width: Theme.of(context)
-                                        .textTheme
-                                        .headline1!
-                                        .fontSize! *
-                                    2.5,
-                                child: Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10, right: 10, left: 10),
-                                    child: RaisedButton(
-                                      onPressed: () {
-                                        Map req_new_item = {
-                                          "title": title,
-                                          "text": text,
-                                          "kind": kind,
-                                          "completed": completed,
-                                          "dt": '$selectedDate'
-                                        };
-                                        bloc.newItem(req_new_item);
-                                        Navigator.pop(context);
-
-                                      },
-                                    )))))
-                  ])
-              )
-          )
-      ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (this._formKey.currentState!.validate()) {
+                          Map req_new_item = {
+                            "title": title,
+                            "text": text,
+                            "kind": kind,
+                            "completed": completed,
+                            "dt": '$selectedDate'
+                          };
+                          developer.log('req_new_item');
+                          developer.log('${req_new_item}');
+                          bloc.newItem(req_new_item);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Icon(Icons.save_outlined),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(CircleBorder()),
+                        padding: MaterialStateProperty.all(EdgeInsets.all(20)),
+                        backgroundColor: MaterialStateProperty.all(Colors.blue),
+                        // <-- Button color
+                        overlayColor:
+                            MaterialStateProperty.resolveWith<Color?>((states) {
+                          if (states.contains(MaterialState.pressed))
+                            return Colors.lightBlue; // <-- Splash color
+                        }),
+                      ),
+                    ),
+                  ])))),
     );
   }
 }
