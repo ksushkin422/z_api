@@ -254,7 +254,7 @@ class _UpdateItemState extends State<UpdateItem> {
                     ),
                     const SizedBox(height: 10.0),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (this._formKey.currentState!.validate()) {
                           //
                           // Map req_new_item = {
@@ -267,7 +267,7 @@ class _UpdateItemState extends State<UpdateItem> {
                           // developer.log('req_new_item');
                           // developer.log('${req_new_item}');
                           // bloc.newItem(req_new_item);
-                          bloc.updateItem(
+                          await bloc.updateItem(
                               (title!='')?title:item.title,
                               (text!='')?text:item.text,
                               (kind!=0)?kind:item.kind,

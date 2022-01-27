@@ -244,7 +244,7 @@ class _AddItemState extends State<AddItem> {
                     ),
                     const SizedBox(height: 10.0),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (this._formKey.currentState!.validate()) {
                           Map req_new_item = {
                             "title": title,
@@ -255,7 +255,7 @@ class _AddItemState extends State<AddItem> {
                           };
                           developer.log('req_new_item');
                           developer.log('${req_new_item}');
-                          bloc.newItem(req_new_item);
+                          await bloc.newItem(req_new_item);
                           Navigator.pop(context);
                         }
                       },

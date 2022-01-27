@@ -10,13 +10,13 @@ getColorType(int number) {
     case 2:
       return Colors.teal;
     case 3:
-      return Colors.green;
+      return Colors.lightBlue;
     case 4:
       return Colors.amberAccent;
     case 5:
       return Colors.purpleAccent;
     case 6:
-      return Colors.lightBlue;
+      return Colors.green;
   }
   return Colors.red;
 }

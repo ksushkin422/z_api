@@ -159,7 +159,7 @@ class _HomeState extends State<Home> {
                                   },
                                   child: Text('Выполнено',)),
                               CupertinoActionSheetAction(
-                                  onPressed: () {
+                                  onPressed: () async {
                                     Navigator.pop(context);
                                     // updateItem(item);
                                     Navigator.push(
@@ -167,6 +167,7 @@ class _HomeState extends State<Home> {
                                         MaterialPageRoute(
                                           builder: (_) => UpdateItem(item),
                                         ));
+
                                   },
                                   child: Text('Изменить',)),
                               CupertinoActionSheetAction(
