@@ -76,6 +76,28 @@ class ApiClient {
     }
   }
 
+
+  Future apiEditItem(String title, String text, int kind, bool completed, DateTime dt, int id) async {
+    final String url = '${basicUrl}/${id}';
+    Dio dio = getDio();
+    Map req_json = {
+      'title': title,
+      'text': text,
+      'kind': kind,
+      'completed': completed,
+      'dt': '$dt'
+    };
+    return await dio.put(url, data: req_json);
+    // return await dio.post(url, data: formData);
+  }
+
+
+  Future apiEditItemJSON(Map req_json, int id) async {
+    final String url = '${basicUrl}/${id}';
+    Dio dio = getDio();
+    return await dio.put(url, data: req_json);
+  }
+
 }
 
 //  на гет

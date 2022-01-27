@@ -21,6 +21,12 @@ class ItemBloc {
     getItems();
   }
 
+  // первый вариант
+  updateItem(title, text, kind, completed, dt, id) async {
+    await itemData.apiEditItem(title, text, kind, completed, dt, id);
+    getItems();
+  }
+
   dispose() {
     _items.close();
   }

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:masonry_grid/masonry_grid.dart';
 import 'package:my_game/bloc/base.dart';
+import 'package:my_game/domain/model/item.dart';
 import 'dart:developer' as developer;
 
 import 'package:my_game/domain/response.dart';
 import 'package:my_game/services/types_items.dart';
+import 'package:my_game/ui/update_item_form.dart';
 
 import 'new_item_form.dart';
 
@@ -159,6 +161,12 @@ class _HomeState extends State<Home> {
                               CupertinoActionSheetAction(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    // updateItem(item);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => UpdateItem(item),
+                                        ));
                                   },
                                   child: Text('Изменить',)),
                               CupertinoActionSheetAction(
@@ -218,5 +226,9 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  updateItem(Item element) {
+    // return
   }
 }
