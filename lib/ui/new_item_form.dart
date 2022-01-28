@@ -26,22 +26,6 @@ class _AddItemState extends State<AddItem> {
   int kind = 0;
   bool completed = false;
 
-  _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: dt,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        dt = selectedDate;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +50,6 @@ class _AddItemState extends State<AddItem> {
                         shape: MaterialStateProperty.all(CircleBorder()),
                         padding: MaterialStateProperty.all(EdgeInsets.all(20)),
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        // <-- Button color
                         overlayColor:
                             MaterialStateProperty.resolveWith<Color?>((states) {
                           if (states.contains(MaterialState.pressed))
@@ -80,7 +63,7 @@ class _AddItemState extends State<AddItem> {
                         child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty)
-                                return 'Пожалуйста введите title';
+                                return 'Пожалуйста введите Название';
                             },
                             autofocus: false,
                             onChanged: (val) {
@@ -88,7 +71,7 @@ class _AddItemState extends State<AddItem> {
                             },
                             initialValue: title,
                             decoration: InputDecoration(
-                              labelText: "title",
+                              labelText: "Название",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
@@ -121,14 +104,14 @@ class _AddItemState extends State<AddItem> {
                         child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty)
-                                return 'Пожалуйста введите text';
+                                return 'Пожалуйста введите Описание';
                             },
                             onChanged: (val) {
                               text = val;
                             },
                             initialValue: text,
                             decoration: InputDecoration(
-                              labelText: "text",
+                              labelText: "Описание",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
@@ -161,7 +144,7 @@ class _AddItemState extends State<AddItem> {
                         child: TextFormField(
                             validator: (value) {
                               if (value!.isEmpty)
-                                return 'Пожалуйста введите kind';
+                                return 'Пожалуйста введите Тип';
                             },
                             onChanged: (val) {
                               kind = int.parse(val);
@@ -175,7 +158,7 @@ class _AddItemState extends State<AddItem> {
                               FilteringTextInputFormatter.digitsOnly
                             ],
                             decoration: InputDecoration(
-                              labelText: "kind",
+                              labelText: "Тип",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
@@ -203,46 +186,6 @@ class _AddItemState extends State<AddItem> {
                               ),
                             ))),
                     const SizedBox(height: 10.0),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        child: SwitchListTile(
-                          title: Text(
-                            'completed',
-                            style: TextStyle(fontWeight: FontWeight.w300),
-                          ),
-                          value: completed,
-                          onChanged: (bool value) {
-                            setState(() {
-                              developer.log('${value}');
-                              completed = value;
-                              // trainingTest=value;
-                            });
-                          },
-                        )),
-                    ListTile(
-                      subtitle: Text(
-                        '${DateFormat('dd-MM-yyyy – kk:mm').format(selectedDate)}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.w300),
-                        // '${formatDate(DateFormat(r'''yyyy-MM-dd''').parse(item.dt), [d, ' ', MM, ' ', yyyy]).toLowerCase()}', textAlign: TextAlign.end, style: TextStyle( fontWeight: FontWeight.w300),
-                      ),
-                      title: Text(
-                        'dt',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                      leading: Icon(
-                        Icons.timer,
-                        color: Colors.lightBlue,
-                      ),
-                      trailing: Icon(
-                        Icons.timer,
-                        color: Colors.lightBlue,
-                      ),
-                      onTap: () => _selectDate(context),
-                    ),
-                    const SizedBox(height: 10.0),
                     ElevatedButton(
                       onPressed: () async {
                         if (this._formKey.currentState!.validate()) {
@@ -250,8 +193,8 @@ class _AddItemState extends State<AddItem> {
                             "title": title,
                             "text": text,
                             "kind": kind,
-                            "completed": completed,
-                            "dt": '$selectedDate'
+                            "completed": false,
+                            "dt": '$dt'
                           };
                           developer.log('req_new_item');
                           developer.log('${req_new_item}');
@@ -264,7 +207,6 @@ class _AddItemState extends State<AddItem> {
                         shape: MaterialStateProperty.all(CircleBorder()),
                         padding: MaterialStateProperty.all(EdgeInsets.all(20)),
                         backgroundColor: MaterialStateProperty.all(Colors.blue),
-                        // <-- Button color
                         overlayColor:
                             MaterialStateProperty.resolveWith<Color?>((states) {
                           if (states.contains(MaterialState.pressed))

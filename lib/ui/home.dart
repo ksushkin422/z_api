@@ -20,6 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   DateFormat dateFormat = DateFormat("dd-M-yyyy HH:mm");
+  DateTime dt = DateTime.now();
 
   @override
   void initState() {
@@ -76,7 +77,7 @@ class _HomeState extends State<Home> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "Loading data from API...",
+            "Загрузка",
             style: Theme.of(context).textTheme.subtitle1,
           ),
           CircularProgressIndicator()
@@ -140,13 +141,10 @@ class _HomeState extends State<Home> {
                              padding: EdgeInsets.symmetric( vertical: 5, horizontal: 5),
                              child: Text(
                               '${DateFormat('dd-MM-yyyy – kk:mm').format(item.dt)}', textAlign: TextAlign.end, style: TextStyle(fontSize: Theme.of(context).textTheme.headline6!.fontSize!*.5, fontWeight: FontWeight.w300),
-                              // '${formatDate(DateFormat(r'''yyyy-MM-dd''').parse(item.dt), [d, ' ', MM, ' ', yyyy]).toLowerCase()}', textAlign: TextAlign.end, style: TextStyle( fontWeight: FontWeight.w300),
                             ),
                            )
                         ])),
-                    onTap: () {
 
-                    },
                     onLongPress: (){
                       showCupertinoModalPopup(
                         context: context,
@@ -156,18 +154,17 @@ class _HomeState extends State<Home> {
                               CupertinoActionSheetAction(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    updateItem(item);
                                   },
-                                  child: Text('Выполнено',)),
+                                  child: Text((item.completed)?'Не выполнено':'Выполнено',)),
                               CupertinoActionSheetAction(
                                   onPressed: () async {
                                     Navigator.pop(context);
-                                    // updateItem(item);
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (_) => UpdateItem(item),
                                         ));
-
                                   },
                                   child: Text('Изменить',)),
                               CupertinoActionSheetAction(
@@ -195,7 +192,6 @@ class _HomeState extends State<Home> {
                                                   Navigator.pop(context);
                                                 },
                                               ),
-
                                             ],
                                           );
                                         });
@@ -223,13 +219,20 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Error occured: $error"),
+          Text("Возникли неполадки: $error"),
         ],
       ),
     );
   }
 
-  updateItem(Item element) {
-    // return
+  updateItem(Item element) async {
+    return await bloc.updateItem(
+        element.title,
+        element.text,
+        element.kind,
+        (element.completed)?false:true,
+        dt,
+        element.id
+    );
   }
 }
