@@ -46,6 +46,7 @@ class _HomeState extends State<Home> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
           child: _steramBuilder(),
         ),
       ),

@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:my_game/bloc/base.dart';
 import 'package:my_game/domain/model/item.dart';
+import 'package:my_game/services/select_kind.dart';
+import 'package:my_game/services/types_items.dart';
 
 class UpdateItem extends StatefulWidget {
   final Item item;
@@ -31,15 +33,14 @@ class _UpdateItemState extends State<UpdateItem> {
   int completed_change = 0;
   Item item;
   int date_change = 0;
+  String selected_kind = '';
+  int selected_kind_id = 0;
 
   _UpdateItemState(this.item);
 
 
   @override
   Widget build(BuildContext context) {
-    developer.log('dtdtdtdtdttdtdtd');
-    developer.log('${dt}');
-    developer.log('${selectedDate}');
     return Scaffold(
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(
@@ -86,27 +87,30 @@ class _UpdateItemState extends State<UpdateItem> {
                               labelText: "Название",
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.red,
+                                  width: 1.0,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Colors.grey,
-                                  width: 2.0,
+                                  width: 1.0,
                                 ),
                               ),
                             ))),
@@ -128,75 +132,42 @@ class _UpdateItemState extends State<UpdateItem> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.red,
+                                  width: 1.0,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.grey,
-                                  width: 2.0,
-                                ),
+                                  width: 1.0,                                ),
                               ),
                             ))),
                     Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty)
-                                return 'Пожалуйста введите тип';
-                            },
-                            onChanged: (val) {
-                              kind = int.parse(val);
-                            },
-                            textInputAction: TextInputAction.next,
-                            autofocus: false,
-                            style: TextStyle(color: Color(0xFF364480)),
-                            initialValue: (item.kind).toString(),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                              labelText: "Тип",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Color(0xFF364480),
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Color(0xFF364480),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 2.0,
-                                ),
-                              ),
-                            ))),
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                        child: ListTile(
+                          leading: Icon(Icons.circle, color: getColorType(selected_kind_id),),
+                          title: Text('Уровень сложности', style: TextStyle(fontWeight: FontWeight.w300),),
+                          subtitle: (selected_kind_id==0)?Text('Выберите тип'):Text('$selected_kind'),
+                          onTap: (){
+                            selectKind();
+                          },
+                        )
+                    ),
                     const SizedBox(height: 10.0),
                     Padding(
                         padding:
@@ -224,7 +195,7 @@ class _UpdateItemState extends State<UpdateItem> {
                           await bloc.updateItem(
                               (title != '') ? title : item.title,
                               (text != '') ? text : item.text,
-                              (kind != 0) ? kind : item.kind,
+                              (selected_kind_id != 0) ? selected_kind_id : item.kind,
                               item.completed,
                               selectedDate,
                               item.id);
@@ -245,6 +216,37 @@ class _UpdateItemState extends State<UpdateItem> {
                       ),
                     ),
                   ])))),
+    );
+  }
+
+  selectKind(){
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          actions: [
+            ...kinds.map((kind)=>
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      setState(() {
+                        selected_kind = kind['kind_str'];
+                        selected_kind_id = kind['kind_id'];
+                        Navigator.pop(context);
+                      });
+                    },
+                    child: Text('${kind['kind_str']}',)
+                )
+            ).toList(),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Отмена')),
+        )
+        ;
+      },
     );
   }
 }

@@ -4,6 +4,8 @@ import 'dart:developer' as developer;
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:my_game/bloc/base.dart';
+import 'package:my_game/services/select_kind.dart';
+import 'package:my_game/services/types_items.dart';
 
 class AddItem extends StatefulWidget {
   @override
@@ -25,6 +27,8 @@ class _AddItemState extends State<AddItem> {
   String text = '';
   int kind = 0;
   bool completed = false;
+  String selected_kind = '';
+  int selected_kind_id = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -76,26 +80,28 @@ class _AddItemState extends State<AddItem> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.red,
+                                  width: 1.0,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.grey,
-                                  width: 2.0,
-                                ),
+                                  width: 1.0,                                ),
                               ),
                             ))),
                     Padding(
@@ -116,75 +122,43 @@ class _AddItemState extends State<AddItem> {
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.red,
+                                  width: 1.0,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Color(0xFF364480),
+                                  width: 1.0,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                                 borderSide: BorderSide(
                                   color: Colors.grey,
-                                  width: 2.0,
-                                ),
+                                  width: 1.0,                                ),
                               ),
                             ))),
-                    Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                        child: TextFormField(
-                            validator: (value) {
-                              if (value!.isEmpty)
-                                return 'Пожалуйста введите Тип';
-                            },
-                            onChanged: (val) {
-                              kind = int.parse(val);
-                            },
-                            textInputAction: TextInputAction.next,
-                            autofocus: false,
-                            style: TextStyle(color: Color(0xFF364480)),
-                            initialValue: (kind).toString(),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            decoration: InputDecoration(
-                              labelText: "Тип",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Color(0xFF364480),
-                                ),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Color(0xFF364480),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 2.0,
-                                ),
-                              ),
-                            ))),
+              Padding(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                  child: ListTile(
+                    leading: Icon(Icons.circle, color: getColorType(selected_kind_id),),
+                    title: Text('Уровень сложности', style: TextStyle(fontWeight: FontWeight.w300),),
+                    subtitle: (selected_kind_id==0)?Text('Выберите тип'):Text('$selected_kind'),
+                    onTap: (){
+                      selectKind();
+                    },
+                  )
+              ),
+
                     const SizedBox(height: 10.0),
                     ElevatedButton(
                       onPressed: () async {
@@ -215,6 +189,43 @@ class _AddItemState extends State<AddItem> {
                       ),
                     ),
                   ])))),
+    );
+  }
+
+  selectKind(){
+    showCupertinoModalPopup(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          actions: [
+            ...kinds.map((kind)=>
+                CupertinoActionSheetAction(
+                    onPressed: () {
+                      setState(() {
+
+                      developer.log('Данные');
+                      developer.log('${kind['kind_str']}');
+                      developer.log('${kind['kind_id']}');
+                      selected_kind = kind['kind_str'];
+                      selected_kind_id = kind['kind_id'];
+                      Navigator.pop(context);
+                      });
+                    },
+                    child: Text('${kind['kind_str']}',)
+                )
+            ).toList(),
+
+
+          ],
+          cancelButton: CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Отмена')),
+        )
+        ;
+      },
     );
   }
 }
